@@ -1,7 +1,7 @@
 import requests
 import json
 from env import config
-import meraki
+from requests.exceptions import HTTPError
 
 base_url = 'MERAKI_BASE_URL'
 endpoint = f"{config['MERAKI_BASE_URL']}/organizations"
@@ -17,11 +17,9 @@ try:
     if response.status_code == 200:
         orgs = response.json()
         for org in orgs:
-            print("Organisation Name: " +
-                  org['name'], "Organisation ID: " + org['id'])
-            org_id = org['id']
-except HTTPError as http:
-    print(http)
+            if org['name'] == 'DevNet Sandbox':
+                org_id = org['id']
+
 except Exception as ex:
     print(ex)
 
@@ -33,12 +31,16 @@ try:
     if response.status_code == 200:
         nets = response.json()
         for net in nets:
-            print(net['productTypes'], "Network Name: " + net['name'])
-            net_id = net['id']
+            if net['name'] == 'DevNet Sandbox ALWAYS ON':
+                net_id = net['id']
+except HTTPError as https:
+    print(ex)
 except Exception as ex:
     print(ex)
 
+
 endpoint = f"{config['MERAKI_BASE_URL']}/networks/{net_id}/devices"
+
 
 try:
     response = requests.get(
@@ -46,7 +48,8 @@ try:
     if response.status_code == 200:
         devices = response.json()
         for device in devices:
-            print("Device Mac Address: " +
-                  device['mac'], "Device Serial Number: " + device['serial'])
+            print(device)
+except HTTPError as https:
+    print(ex)
 except Exception as ex:
     print(ex)
