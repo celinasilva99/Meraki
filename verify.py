@@ -6,7 +6,8 @@ from env import config
 # Verify DNAC access
 dnac_auth_url = f"{config['DNAC_BASE_URL']}/dna/system/api/v1/auth/token"
 
-resp = requests.post(dnac_auth_url, auth=HTTPBasicAuth(config['DNAC_USER'], config['DNAC_PASSWORD']))
+resp = requests.post(dnac_auth_url, auth=HTTPBasicAuth(
+    config['DNAC_USER'], config['DNAC_PASSWORD']))
 
 if resp.status_code == 200:
     print("DNAC Access verified")
