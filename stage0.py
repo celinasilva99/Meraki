@@ -11,6 +11,7 @@ headers = {
     "X-Cisco-Meraki-API-Key": config['MERAKI_KEY']
 }
 
+
 try:
     response = requests.get(
         url=f"{endpoint}", headers=headers)
@@ -49,15 +50,18 @@ try:
         url=f"{endpoint}", headers=headers)
     if response.status_code == 200:
         devices = response.json()
+        l = []
         for device in devices:
             data = (device['name'], device['mac'],
                     device['serial'])
-            print(data)
-
+            l.append(data)
+            print(l)
 except HTTPError as https:
     print(ex)
 except Exception as ex:
     print(ex)
 
+json_object = json.dumps(l, indent=4)
+
 with open('data.json', 'w') as outfile:
-    json.dump(data, outfile)
+    outfile.write(json_object)
