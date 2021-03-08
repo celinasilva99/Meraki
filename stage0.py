@@ -19,6 +19,8 @@ try:
         for org in orgs:
             if org['name'] == 'DevNet Sandbox':
                 org_id = org['id']
+except HTTPError as https:
+    print(ex)
 
 except Exception as ex:
     print(ex)
@@ -48,8 +50,14 @@ try:
     if response.status_code == 200:
         devices = response.json()
         for device in devices:
-            print(device)
+            data = (device['name'], device['mac'],
+                    device['serial'])
+            print(data)
+
 except HTTPError as https:
     print(ex)
 except Exception as ex:
     print(ex)
+
+with open('data.json', 'w') as outfile:
+    json.dump(data, outfile)
